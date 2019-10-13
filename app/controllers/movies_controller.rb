@@ -12,6 +12,16 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = ['G','PG','PG-13','R']
+    if params[:ratings].nil? && params[:order].nil?
+      tempKeys = session[:ratings] || @all_ratings
+      tempOrder = session[:order]
+      redirect_to movies_path(:order => tempOrder, :ratings => tempKeys)
+    # elsif params[:ratings].nil?
+    #   tempKeys = session[:ratings] || @all_ratings
+    #   movies_path(:ratings => tempKeys)
+    # elsif params[:order].nil?
+    #   tempOrder = session[:order]
+    end
     @myKeys = params[:ratings].nil? ? (session[:ratings] || @all_ratings) : params[:ratings].keys
     # @myKeys = params[:ratings].keys || session[:ratings] || @all_ratings
     # @myKeys = session[:ratingKeys] || myKeys
