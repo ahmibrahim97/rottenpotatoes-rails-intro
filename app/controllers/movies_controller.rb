@@ -12,8 +12,9 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = ['G','PG','PG-13','R']
+    rating = {"G"=>"1", "PG"=>"1", "PG-13"=>"1", "R"=>"1"}
     if params[:ratings].nil? && params[:order].nil?
-      tempKeys = session[:ratings] || @all_ratings
+      tempKeys = session[:ratings]
       tempOrder = session[:order]
       redirect_to movies_path(:order => tempOrder, :ratings => tempKeys)
     # elsif params[:ratings].nil?
@@ -22,17 +23,17 @@ class MoviesController < ApplicationController
     # elsif params[:order].nil?
     #   tempOrder = session[:order]
     end
-    @myKeys = params[:ratings].nil? ? (session[:ratings] || @all_ratings) : params[:ratings].keys
+    @myKeys = params[:ratings].nil? ? rating : params[:ratings]
     # @myKeys = params[:ratings].keys || session[:ratings] || @all_ratings
     # @myKeys = session[:ratingKeys] || myKeys
     @myOrder = params[:order] || session[:order]
 
     if @myOrder == 'title'
-      @movies = Movie.order(:title).where({rating: @myKeys})
+      @movies = Movie.order(:title).where({rating: @myKeys.keys})
     elsif @myOrder == 'release_date'
-      @movies = Movie.order(:release_date).where({rating: @myKeys})
+      @movies = Movie.order(:release_date).where({rating: @myKeys.keys})
     else
-      @movies = Movie.where({rating: @myKeys})
+      @movies = Movie.where({rating: @myKeys.keys})
     end
     
     session[:ratings] = @myKeys
