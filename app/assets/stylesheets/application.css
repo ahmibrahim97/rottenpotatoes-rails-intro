@@ -13,3 +13,8 @@
  *= require_tree .
  *= require_self
  */
+
+table th.hilite {
+	text-shadow: 2px 6px 2px #C9E6EF;
+	background-color: yellow;
+}
