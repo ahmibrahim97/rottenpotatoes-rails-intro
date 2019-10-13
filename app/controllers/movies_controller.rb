@@ -12,13 +12,21 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = ['G','PG','PG-13','R']
-    @myKeys = params[:ratings].nil? ? @all_ratings : params[:ratings].keys
-    if params[:order] == 'title'
-      return @movies = Movie.order(:title).where({rating: @myKeys})
-    elsif params[:order] == 'rating'
-      return @movies = Movie.order(:releaseDate).where({rating: @myKeys})
+    @myKeys = params[:ratings].nil? ? (session[:ratings] || @all_ratings) : params[:ratings].keys
+    # @myKeys = params[:ratings].keys || session[:ratings] || @all_ratings
+    # @myKeys = session[:ratingKeys] || myKeys
+    @myOrder = params[:order] || session[:order]
+
+    if @myOrder == 'title'
+      @movies = Movie.order(:title).where({rating: @myKeys})
+    elsif @myOrder == 'release_date'
+      @movies = Movie.order(:release_date).where({rating: @myKeys})
+    else
+      @movies = Movie.where({rating: @myKeys})
     end
-    @movies = Movie.where({rating: @myKeys})
+    
+    session[:ratings] = @myKeys
+    session[:order] = @myOrder
   end
 
   def new
