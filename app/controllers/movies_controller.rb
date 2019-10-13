@@ -12,7 +12,7 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = ['G','PG','PG-13','R']
-    rating = {"G"=>"1", "PG"=>"1", "PG-13"=>"1", "R"=>"1"}
+    full_rating = {"G"=>"1", "PG"=>"1", "PG-13"=>"1", "R"=>"1"}
     if params[:ratings].nil? && params[:order].nil?
       tempKeys = session[:ratings]
       tempOrder = session[:order]
@@ -23,7 +23,7 @@ class MoviesController < ApplicationController
     # elsif params[:order].nil?
     #   tempOrder = session[:order]
     end
-    @myKeys = params[:ratings].nil? ? rating : params[:ratings]
+    @myKeys = params[:ratings].nil? ? session[:ratings] || full_rating : params[:ratings]
     # @myKeys = params[:ratings].keys || session[:ratings] || @all_ratings
     # @myKeys = session[:ratingKeys] || myKeys
     @myOrder = params[:order] || session[:order]
